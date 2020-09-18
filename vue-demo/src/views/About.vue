@@ -1,11 +1,16 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
-    <div id="add">
-      {{v1}} + {{v2}} = {{ans}}
-      <button v-on:click="func_demo()">
-          计算
-      </button>
+    <h1>This is an sample calculator</h1>
+    <div v-on:input="func_demo()">
+      <input v-model="v1" placeholder="edit me"/>
+      <select v-model="operate" >
+            <option value ="+">+</option>
+            <option value ="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+      <input v-model="v2" placeholder="edit me"/>
+      = {{ans}}
     </div>
   </div>
   
@@ -16,12 +21,12 @@
 import axios from 'axios'
 
 export default{
-  name: 'add',
   data(){
     return {
-      v1:"100",
-      v2:"200",
-      ans:" "
+      v1:"1",
+      v2:"1",
+      operate:"+",
+      ans:"2"
     }
   },
   methods: {
@@ -30,16 +35,17 @@ export default{
       axios.get('http://localhost:5000/add',{
         params:{
           v1:this.v1,
-          v2:this.v2
+          v2:this.v2,
+          operate:this.operate
         }
       })
-      .then(function (response) {
-          alert(response);
-          this.ans = response
+      .then((response)=>{
+        console.log(response)
+        this.ans = response.data;
       })
-      .catch(function (error) {
-          alert(error);
-          console.log(error);
+      .catch((error)=>{
+        alert(error);
+        console.log(error);
       });
     }
   }
